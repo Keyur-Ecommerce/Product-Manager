@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Detail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background-color: #f8f9fa; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 20px; }
+        
+        /* The Card to be captured */
+        #capture { 
+            background: white; padding: 40px; border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 450px; 
+            border-top: 8px solid #3498db; box-sizing: border-box;
+        }
+        
+        h1 { color: #2c3e50; font-size: 26px; text-align: center; margin-bottom: 20px; border-bottom: 2px solid #f1f1f1; padding-bottom: 10px; }
+        
+        .info-row { display: flex; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid #f1f1f1; }
+        .info-row:last-child { border-bottom: none; }
+        
+        .label { font-weight: bold; color: #34495e; }
+        .value { color: #2c3e50; font-weight: 500; }
+        
+        .sku-tag { background: #3498db; color: white; padding: 3px 10px; border-radius: 6px; font-size: 13px; font-weight: bold; }
+        
+        /* Buttons Section */
+        .button-group { margin-top: 30px; display: flex; gap: 10px; width: 450px; }
+        .btn { flex: 1; text-align: center; text-decoration: none; font-weight: bold; padding: 14px; border-radius: 10px; cursor: pointer; border: none; font-size: 14px; transition: 0.3s; }
+        
+        .btn-download { background-color: #27ae60; color: white; box-shadow: 0 4px 10px rgba(39, 174, 96, 0.3); }
+        .btn-download:hover { background-color: #219150; transform: translateY(-2px); }
+        
+        .btn-back { background-color: white; color: #3498db; border: 2px solid #3498db; }
+        .btn-back:hover { background: #3498db; color: white; }
+    </style>
+</head>
+<body>
+
+    <div id="capture">
+        <h1>Product Detail</h1>
+                
+        <div class="info-row"><span class="label">Product Name:</span> <span class="value" id="d_name"></span></div>
+        <div class="info-row"><span class="label">SKU ID:</span> <span class="sku-tag" id="d_sku"></span></div>
+        <div class="info-row"><span class="label">Settlement Price:</span> <span class="value" id="d_price"></span></div>
+        <div class="info-row"><span class="label">Design Name:</span> <span class="value" id="d_design"></span></div>
+        <div class="info-row"><span class="label">Color:</span> <span class="value" id="d_color"></span></div>
+        <div class="info-row"><span class="label">Weight:</span> <span class="value" id="d_weight"></span></div>
+        
+        <div class="info-row"><span class="label">Length:</span> <span class="value" id="d_l"></span></div>
+        <div class="info-row"><span class="label">Width:</span> <span class="value" id="d_w"></span></div>
+        <div class="info-row"><span class="label">Height:</span> <span class="value" id="d_h"></span></div>
+        
+        <div class="info-row"><span class="label">Material:</span> <span class="value" id="d_mat"></span></div>
+    </div>
+
+    <div class="button-group">
+        <button class="btn btn-download" onclick="downloadImage()">Download as Image</button>
+        <a href="index.html" class="btn btn-back">← Back</a>
+    </div>
+
+    <script>
+        // 1. Fill the data from URL parameters
+        const p = new URLSearchParams(window.location.search);
+        
+        document.getElementById('d_name').textContent = p.get('pName') || "N/A";
+        document.getElementById('d_sku').textContent = p.get('pSku') || "N/A";
+        document.getElementById('d_price').textContent = p.get('price') || "N/A";
+        document.getElementById('d_design').textContent = p.get('design') || "N/A";
+        document.getElementById('d_color').textContent = p.get('color') || "N/A";
+        document.getElementById('d_weight').textContent = p.get('weight') || "N/A";
+        document.getElementById('d_l').textContent = p.get('len') || "0";
+        document.getElementById('d_w').textContent = p.get('wid') || "0";
+        document.getElementById('d_h').textContent = p.get('hgt') || "0";
+        document.getElementById('d_mat').textContent = p.get('mat') || "N/A";
+
+        // 2. Function to capture the div and download it as PNG
+        function downloadImage() {
+            const container = document.getElementById("capture");
+            // Scale 2 makes the image high quality
+            html2canvas(container, { scale: 2 }).then(canvas => {
+                const link = document.createElement("a");
+                link.download = "Product-" + (p.get('pSku') || "Detail") + ".png";
+                link.href = canvas.toDataURL("image/png");
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
